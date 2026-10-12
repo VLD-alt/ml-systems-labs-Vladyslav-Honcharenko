@@ -1,0 +1,3 @@
+model,train_time_median_ms,infer_latency_median_ms,infer_latency_p95_ms,model_size_bytes,model_size_kb,param_bytes,rss_baseline_mb,peak_rss_train_mb,train_mem_delta_mb,peak_rss_infer_mb,deploy_rss_interpreter_mb,deploy_rss_after_imports_mb,deploy_rss_after_load_mb,deploy_peak_rss_mb
+LogisticRegression,288.0993,0.0876,0.0960,1055,1.0303,248,264.8125,264.8789,0.0664,264.8828,16.5469,95.6484,95.7461,95.7852
+RandomForest,169.5717,4.1892,6.1075,290889,284.0713,251040,266.1016,266.1055,0.0039,266.2031,16.4414,95.6719,96.8438,97.0078
