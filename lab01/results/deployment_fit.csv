@@ -1,17 +1,17 @@
-model,scenario,tier,memory_kb,latency_ms,size_kb,mem_fits_smallest_device,mem_fits_largest_device,latency_ok,size_ok,verdict
-LogisticRegression,python,Cloud,98084.0,0.0876,1.03,True,True,True,True,YES
-LogisticRegression,python,Edge,98084.0,0.0876,1.03,True,True,True,True,YES
-LogisticRegression,python,Mobile,98084.0,0.0876,1.03,False,True,True,True,PARTIAL (larger devices only)
-LogisticRegression,python,TinyML,98084.0,0.0876,1.03,False,False,True,True,NO
-LogisticRegression,native,Cloud,0.2,0.0876,0.24,True,True,True,True,YES
-LogisticRegression,native,Edge,0.2,0.0876,0.24,True,True,True,True,YES
-LogisticRegression,native,Mobile,0.2,0.0876,0.24,True,True,True,True,YES
-LogisticRegression,native,TinyML,0.2,0.0876,0.24,True,True,True,True,YES
-RandomForest,python,Cloud,99336.0,4.1892,284.07,True,True,True,True,YES
-RandomForest,python,Edge,99336.0,4.1892,284.07,True,True,True,True,YES
-RandomForest,python,Mobile,99336.0,4.1892,284.07,False,True,True,True,PARTIAL (larger devices only)
-RandomForest,python,TinyML,99336.0,4.1892,284.07,False,False,True,False,NO
-RandomForest,native,Cloud,245.2,4.1892,245.16,True,True,True,True,YES
-RandomForest,native,Edge,245.2,4.1892,245.16,True,True,True,True,YES
-RandomForest,native,Mobile,245.2,4.1892,245.16,True,True,True,True,YES
-RandomForest,native,TinyML,245.2,4.1892,245.16,True,True,True,False,NO
+model,scenario,tier,memory_kb,memory_budget_kb,latency_ms,latency_p95_ms,latency_budget_ms,latency_headroom_x,size_kb,size_budget_kb,size_headroom_x,mem_fits_smallest_device,mem_fits_largest_device,latency_ok,latency_p95_ok,size_ok,verdict
+LogisticRegression,python,Cloud,98084.0,>=1048576,0.0876,0.096,100,1141.6,1.03,512000.0,496955.5,True,True,True,True,True,YES
+LogisticRegression,python,Edge,98084.0,262144-1048576,0.0876,0.096,50,570.8,1.03,51200.0,49695.5,True,True,True,True,True,YES
+LogisticRegression,python,Mobile,98084.0,65536-262144,0.0876,0.096,20,228.3,1.03,10240.0,9939.1,False,True,True,True,True,PARTIAL (larger devices only)
+LogisticRegression,python,TinyML,98084.0,256-256,0.0876,0.096,10,114.2,1.03,100.0,97.1,False,False,True,True,True,NO
+LogisticRegression,native,Cloud,0.2,>=1048576,0.0876,0.096,100,1141.6,0.24,512000.0,2114064.5,True,True,True,True,True,YES
+LogisticRegression,native,Edge,0.2,262144-1048576,0.0876,0.096,50,570.8,0.24,51200.0,211406.5,True,True,True,True,True,YES
+LogisticRegression,native,Mobile,0.2,65536-262144,0.0876,0.096,20,228.3,0.24,10240.0,42281.3,True,True,True,True,True,YES
+LogisticRegression,native,TinyML,0.2,256-256,0.0876,0.096,10,114.2,0.24,100.0,412.9,True,True,True,True,True,YES
+RandomForest,python,Cloud,99336.0,>=1048576,4.1892,6.1075,100,23.9,284.07,512000.0,1802.4,True,True,True,True,True,YES
+RandomForest,python,Edge,99336.0,262144-1048576,4.1892,6.1075,50,11.9,284.07,51200.0,180.2,True,True,True,True,True,YES
+RandomForest,python,Mobile,99336.0,65536-262144,4.1892,6.1075,20,4.8,284.07,10240.0,36.0,False,True,True,True,True,PARTIAL (larger devices only)
+RandomForest,python,TinyML,99336.0,256-256,4.1892,6.1075,10,2.4,284.07,100.0,0.4,False,False,True,True,False,NO
+RandomForest,native,Cloud,245.2,>=1048576,4.1892,6.1075,100,23.9,245.16,512000.0,2088.5,True,True,True,True,True,YES
+RandomForest,native,Edge,245.2,262144-1048576,4.1892,6.1075,50,11.9,245.16,51200.0,208.8,True,True,True,True,True,YES
+RandomForest,native,Mobile,245.2,65536-262144,4.1892,6.1075,20,4.8,245.16,10240.0,41.8,True,True,True,True,True,YES
+RandomForest,native,TinyML,245.2,256-256,4.1892,6.1075,10,2.4,245.16,100.0,0.4,True,True,True,True,False,NO

@@ -49,17 +49,25 @@ def main():
                 mem_all = mem <= b["mem_min"]
                 mem_any = b["mem_max"] is None or mem <= b["mem_max"]
                 lat_ok = c.infer_latency_median_ms <= b["latency_ms"]
+                lat_p95_ok = c.infer_latency_p95_ms <= b["latency_ms"]
                 size_ok = size <= b["size"]
                 rows.append({
                     "model": c.model,
                     "scenario": scenario,
                     "tier": tier,
                     "memory_kb": round(mem / KB, 1),
+                    "memory_budget_kb": f"{b['mem_min'] / KB:.0f}-{b['mem_max'] / KB:.0f}" if b["mem_max"] else f">={b['mem_min'] / KB:.0f}",
                     "latency_ms": round(c.infer_latency_median_ms, 4),
+                    "latency_p95_ms": round(c.infer_latency_p95_ms, 4),
+                    "latency_budget_ms": b["latency_ms"],
+                    "latency_headroom_x": round(b["latency_ms"] / c.infer_latency_median_ms, 1),
                     "size_kb": round(size / KB, 2),
+                    "size_budget_kb": b["size"] / KB,
+                    "size_headroom_x": round(b["size"] / size, 1),
                     "mem_fits_smallest_device": mem_all,
                     "mem_fits_largest_device": mem_any,
                     "latency_ok": lat_ok,
+                    "latency_p95_ok": lat_p95_ok,
                     "size_ok": size_ok,
                     "verdict": verdict(mem_all, mem_any, lat_ok, size_ok),
                 })

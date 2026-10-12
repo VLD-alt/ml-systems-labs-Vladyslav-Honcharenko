@@ -40,6 +40,10 @@ def main():
     print(f"Python      : {sys.version.split()[0]}")
     print(f"Implementation: {platform.python_implementation()}")
     print(f"Executable  : {sys.executable}")
+    print(f"Prefix      : {sys.prefix}")
+    print(f"Base prefix : {sys.base_prefix}")
+    isolated = sys.prefix != sys.base_prefix
+    print(f"Isolated venv: {'YES' if isolated else 'NO - not running inside a virtual environment'}")
     print(f"Platform    : {platform.platform()}")
     print(f"Machine     : {platform.machine()}")
     print(f"Processor   : {platform.processor()}")

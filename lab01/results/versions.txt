@@ -1,6 +1,9 @@
 Python      : 3.11.8
 Implementation: CPython
 Executable  : C:\Users\Fake_GB\Downloads\rest\ml-systems-labs\.venv\Scripts\python.exe
+Prefix      : C:\Users\Fake_GB\Downloads\rest\ml-systems-labs\.venv
+Base prefix : C:\Users\Fake_GB\AppData\Local\Programs\Python\Python311
+Isolated venv: YES
 Platform    : Windows-10-10.0.19045-SP0
 Machine     : AMD64
 Processor   : AMD64 Family 23 Model 8 Stepping 2, AuthenticAMD

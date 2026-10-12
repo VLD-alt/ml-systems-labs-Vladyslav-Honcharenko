@@ -3,7 +3,6 @@ import random
 from pathlib import Path
 
 import numpy as np
-import torch
 from sklearn.datasets import load_breast_cancer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -14,6 +13,8 @@ RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 
 
 def set_seeds(seed=SEED):
+    import torch  # imported here so torch-free scripts can reuse load_split/make_models
+
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
