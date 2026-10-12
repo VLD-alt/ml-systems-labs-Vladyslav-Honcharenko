@@ -171,36 +171,36 @@ Budgets from the lab manual:
 | Mobile | 64–256 MB | ≤ 20 ms | ≤ 10 MB |
 | TinyML | ≤ 256 KB | ≤ 10 ms | ≤ 100 KB |
 
-Each cell below shows the result and the headroom (budget ÷ measured; "over"
-means measured ÷ budget).
+Each cell below shows OK / Partial / Fail and the headroom (budget ÷ measured;
+"over" means measured ÷ budget).
 
 **LogisticRegression, served with Python** — memory 95.8 MB, latency 0.088 ms
 (p95 0.096 ms), size 1.03 KB:
 
 | Tier | Memory | Latency | Size | Verdict |
 |---|---|---|---|---|
-| Cloud | ✅ 10.7× below 1 GB | ✅ 1142× | ✅ ≈ 500 000× | **Fits** |
-| Edge | ✅ 2.7× below the smallest 256 MB device | ✅ 571× | ✅ ≈ 50 000× | **Fits** |
-| Mobile | ⚠️ fits a 256 MB device (2.7×), not a 64 MB one | ✅ 228× | ✅ ≈ 9 900× | **Partial** |
-| TinyML | ❌ 383× over 256 KB | ✅ 114× | ✅ 97× | **No** (memory) |
+| Cloud | OK, 10.7× below 1 GB | OK, 1142× | OK, ≈ 500 000× | **Fits** |
+| Edge | OK, 2.7× below the smallest 256 MB device | OK, 571× | OK, ≈ 50 000× | **Fits** |
+| Mobile | Partial: fits a 256 MB device (2.7×), not a 64 MB one | OK, 228× | OK, ≈ 9 900× | **Partial** |
+| TinyML | Fail, 383× over 256 KB | OK, 114× | OK, 97× | **No** (memory) |
 
 **RandomForest, served with Python** — memory 97.0 MB, latency 4.19 ms
 (p95 6.11 ms), size 284.07 KB:
 
 | Tier | Memory | Latency | Size | Verdict |
 |---|---|---|---|---|
-| Cloud | ✅ 10.6× below 1 GB | ✅ 23.9× | ✅ 1802× | **Fits** |
-| Edge | ✅ 2.6× below the smallest 256 MB device | ✅ 11.9× | ✅ 180× | **Fits** |
-| Mobile | ⚠️ fits a 256 MB device (2.6×), not a 64 MB one | ✅ 4.8× (p95 3.3×) | ✅ 36× | **Partial** |
-| TinyML | ❌ 388× over 256 KB | ✅ 2.4× (p95 1.6×) | ❌ 2.8× over 100 KB | **No** (memory and size) |
+| Cloud | OK, 10.6× below 1 GB | OK, 23.9× | OK, 1802× | **Fits** |
+| Edge | OK, 2.6× below the smallest 256 MB device | OK, 11.9× | OK, 180× | **Fits** |
+| Mobile | Partial: fits a 256 MB device (2.6×), not a 64 MB one | OK, 4.8× (p95 3.3×) | OK, 36× | **Partial** |
+| TinyML | Fail, 388× over 256 KB | OK, 2.4× (p95 1.6×) | Fail, 2.8× over 100 KB | **No** (memory and size) |
 
 **Exported to native code** (no Python runtime) — memory and size = parameter
 bytes, latency as measured:
 
 | Model | Cloud | Edge | Mobile | TinyML |
 |---|---|---|---|---|
-| LogisticRegression (248 B) | ✅ | ✅ | ✅ | ✅ 248 B ≪ 100 KB size, ≪ 256 KB memory |
-| RandomForest (245.2 KB) | ✅ | ✅ | ✅ | ❌ 245.2 KB > 100 KB size; memory 245.2 KB leaves almost no headroom in 256 KB |
+| LogisticRegression (248 B) | Yes | Yes | Yes | Yes: 248 B ≪ 100 KB size, ≪ 256 KB memory |
+| RandomForest (245.2 KB) | Yes | Yes | Yes | No: 245.2 KB > 100 KB size; memory 245.2 KB leaves almost no headroom in 256 KB |
 
 All latencies were measured on a desktop CPU. A phone CPU is several times
 slower and a microcontroller much slower than that, so a small latency
@@ -211,8 +211,8 @@ while the large headroom of LogisticRegression (> 100× everywhere) is.
 
 | Model | Cloud | Edge | Mobile | TinyML |
 |---|---|---|---|---|
-| LogisticRegression | ✅ Yes | ✅ Yes | ✅ Yes after native export; with Python only on devices with > ~100 MB free | ✅ Yes, only after native export |
-| RandomForest | ✅ Yes | ✅ Yes | ⚠️ Yes after native export, but latency margin is thin on a phone CPU; with Python only on devices with > ~100 MB free | ❌ No — too big even without Python |
+| LogisticRegression | Yes | Yes | Yes after native export; with Python only on devices with > ~100 MB free | Yes, only after native export |
+| RandomForest | Yes | Yes | Partial: yes after native export, but latency margin is thin on a phone CPU; with Python only on devices with > ~100 MB free | No — too big even without Python |
 
 What limits each tier: on Cloud and Edge nothing is close to a limit. On
 Mobile the limit is **memory of the Python runtime** (≈ 96 MB, of which the
