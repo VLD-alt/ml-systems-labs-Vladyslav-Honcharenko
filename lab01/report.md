@@ -39,7 +39,9 @@ benign share 0.628 / 0.626. Seeds 42 for `random`, `numpy`, `torch`,
 | Peak memory (deployment process) | A fresh process that imports only numpy, sklearn and joblib, loads one model and predicts the sample 100 times; peak RSS taken from psutil (incl. Windows `peak_wset`) |
 | Parameter bytes | Size of the fitted numeric arrays (coefficients, or tree node and value arrays) |
 
-All timers use `time.perf_counter`. Raw timings are in `results/raw_timings.json`.
+All timers use `time.perf_counter`. Every individual run is saved in
+`results/raw_timings.json`; per-run tables and plots are produced from it by
+`src/plot_timings.py`.
 
 **Deployment check.** Each model is compared with the manual's budgets in two
 scenarios: *python* (served as measured — deployment-process RSS and joblib
@@ -61,7 +63,7 @@ model "fully" fits if it is below the smallest device in the tier and
 
 | Metric | LogisticRegression | RandomForest |
 |---|---:|---:|
-| Training time, median of 5 | 288.10 ms | 169.57 ms |
+| Training time, median of 5 | 288.10 ms (0.288 s) | 169.57 ms (0.170 s) |
 | Single-sample latency, median of 100 | 0.088 ms | 4.189 ms |
 | Single-sample latency, p95 | 0.096 ms | 6.108 ms |
 | Model size (joblib) | 1 055 B = 1.03 KB | 290 889 B = 284.07 KB |
@@ -73,6 +75,59 @@ model "fully" fits if it is below the smallest device in the tier and
 | Deployment process: after numpy + sklearn import | 95.6 MB | 95.7 MB |
 | Deployment process: after model load | 95.7 MB | 96.8 MB |
 | **Deployment process: peak RSS** | **95.8 MB** | **97.0 MB** |
+
+### Every timing run (`results/training_runs.csv`, `results/inference_stats.csv`)
+
+Following the manual, training was timed **5 times** per model (after 1
+warm-up fit) and single-sample prediction **100 times** per model (after 1
+warm-up call). All individual runs are shown below, not only the medians.
+
+**Training — 5 runs, seconds:**
+
+| Run | LogisticRegression | RandomForest (100 trees) |
+|---:|---:|---:|
+| 1 | 0.2833 | 0.1736 |
+| 2 | 0.2928 | 0.1687 |
+| 3 | 0.2794 | 0.1696 |
+| 4 | 0.2881 | 0.1693 |
+| 5 | 0.3013 | 0.1745 |
+| min | 0.2794 | 0.1687 |
+| **median** | **0.2881** | **0.1696** |
+| max | 0.3013 | 0.1745 |
+| spread (max − min) / median | 7.6 % | 3.4 % |
+
+![Training time, 5 runs per model](results/training_runs.png)
+
+**Single-sample prediction — 100 runs:**
+
+| Statistic over 100 runs | LogisticRegression | RandomForest |
+|---|---:|---:|
+| min | 0.0863 ms | 3.996 ms |
+| **median** | **0.0876 ms** | **4.189 ms** |
+| mean | 0.0890 ms | 4.892 ms |
+| p95 | 0.0960 ms | 6.108 ms |
+| max | 0.1113 ms | 56.818 ms |
+| total time of all 100 predictions | 0.0089 s | 0.4892 s |
+| predictions per second (1 / median) | ≈ 11 400 | ≈ 240 |
+
+![Latency of 100 single-sample predictions per model](results/inference_runs.png)
+
+What the individual runs show:
+
+* **Training is stable.** All five runs of each model lie within a few percent
+  of the median, so the median of 5 is a reliable number. Training 100 trees on
+  398 samples takes ≈ 0.17 s; the logistic regression takes ≈ 0.29 s because
+  lbfgs runs the full 1000 iterations.
+* **One warm-up call is not always enough.** The first ~10 logistic-regression
+  predictions are up to 27 % slower (0.11 ms vs 0.088 ms) before the latency
+  settles, which is CPU caches and branch predictors warming up.
+* **A single outlier can wreck the mean.** Run 84 of the forest took 56.8 ms,
+  ≈ 14× its median, most likely because the OS scheduled another process at that
+  moment. That one run pulls the mean up to 4.89 ms, while the median stays at
+  4.19 ms. This is why the manual asks for the median, not the mean or a single
+  run. The outlier also crosses the 10 ms TinyML latency budget, so a hard
+  real-time target would have to plan for the tail (p95 or max), not only the
+  median.
 
 ### Deployment fit (`results/deployment_fit.csv`)
 
@@ -146,4 +201,4 @@ process only.
 From the repo root, with the `.venv` active:
 `python lab01/src/print_versions.py > lab01/results/versions.txt`, then
 `python lab01/src/train_baselines.py`, `python lab01/src/measure_system_cost.py`,
-`python lab01/src/deployment_fit.py`.
+`python lab01/src/plot_timings.py`, `python lab01/src/deployment_fit.py`.
