@@ -1,0 +1,13 @@
+# Environment
+.venv/
+__pycache__/
+*.pyc
+
+# Data (downloaded by scripts)
+data/
+
+# Tooling
+.ipynb_checkpoints/
+mlruns/
+.pytest_cache/
+.ruff_cache/
